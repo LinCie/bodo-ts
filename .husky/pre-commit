@@ -1,0 +1,3 @@
+pnpm test:run
+pnpm type-check
+npx lint-staged

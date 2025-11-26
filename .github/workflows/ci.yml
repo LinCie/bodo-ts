@@ -1,0 +1,44 @@
+name: Quality Checks
+on:
+  push:
+
+jobs:
+  quality-checks:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        node-version: [22]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run tests
+        run: pnpm test:run
+
+      - name: Run TypeScript type checking
+        run: pnpm type-check
+
+      - name: Run ESLint and fix
+        run: pnpm lint:fix
+
+      - name: Format with Prettier
+        run: pnpm format
+
+      - name: Check for remaining ESLint errors
+        run: pnpm lint
+
+      - name: Check for remaining formatting issues
+        run: pnpm format:check
