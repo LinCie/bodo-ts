@@ -7,7 +7,7 @@ import tseslint from "typescript-eslint"
 
 export default defineConfig(
   {
-    ignores: ["**/*.js"],
+    ignores: ["**/*.js", "**/database.d.ts"],
   },
   eslint.configs.recommended,
   tseslint.configs.strictTypeChecked,
