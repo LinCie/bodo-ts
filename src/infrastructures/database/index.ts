@@ -1,4 +1,4 @@
-import { env } from "#config/env.config.js"
+import { env } from "#infrastructures/config/env.config.js"
 import { Kysely, MysqlDialect } from "kysely"
 import { createPool } from "mysql2"
 import type { DB } from "./database.d.ts"

@@ -1,6 +1,5 @@
 import type { NextFunction, Request, Response } from "express"
 
-import { env } from "#config/env.config.js"
 import {
   BadRequestError,
   ForbiddenError,
@@ -8,7 +7,8 @@ import {
   UnauthorizedError,
   UniqueConstraintError,
 } from "#core/errors/base.error.js"
-import { logger } from "#utilities/logger.utility.js"
+import { env } from "#infrastructures/config/env.config.js"
+import { logger } from "#infrastructures/utilities/logger.utility.js"
 import z, { ZodError } from "zod"
 
 function errorMiddleware(
