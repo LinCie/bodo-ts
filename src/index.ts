@@ -1,5 +1,6 @@
 import { env } from "#config/env.config.js"
 import { errorMiddleware } from "#middlewares/error.middleware.js"
+import { ItemsController } from "#modules/items/items.controller.js"
 import { logger } from "#utilities/logger.utility.js"
 import express from "express"
 import helmet from "helmet"
@@ -28,6 +29,7 @@ app
   .get("/", (req, res) => {
     res.send("Hello World!")
   })
+  .use("/api/v1/items", new ItemsController().router)
 
 // After request middlewares
 app.use(errorMiddleware)

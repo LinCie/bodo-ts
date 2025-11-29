@@ -53,17 +53,18 @@ class ItemsController extends Controller {
   private list = async (req: Request, res: Response) => {
     const query = listItemsQuerySchema.parse(req.query)
     const items = await this.itemsService.findAll({
-      spaceId: query.spaceId,
+      spaceId: query.space_id,
       page: query.page,
       limit: query.limit,
       search: query.search,
-      sortBy: query.sortBy as
+      sortBy: query.sort_by as
         | "id"
         | "name"
         | "created_at"
         | "updated_at"
         | undefined,
-      sortOrder: query.sortOrder,
+      sortOrder: query.sort_order,
+      type: query.type,
     })
     res.json(items)
   }

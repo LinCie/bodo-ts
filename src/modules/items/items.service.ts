@@ -17,6 +17,7 @@ class ItemsService extends Service {
     status?: "active" | "inactive" | "archived"
     sortBy?: OrderByExpression<DB, "items", Items>
     sortOrder?: OrderByDirection
+    type?: "commerce" | "dashboard"
   }) {
     const {
       spaceId,
@@ -26,24 +27,42 @@ class ItemsService extends Service {
       status = "active",
       sortBy,
       sortOrder,
+      type = "dashboard",
     } = options
-    const query = this.db
+    let query = this.db
       .selectFrom("items")
-      .selectAll()
       .where("space_id", "=", spaceId)
       .where("status", "=", status)
+      .limit(limit)
+      .offset((page - 1) * limit)
+
     if (search) {
       const searches = search.split(" ")
       for (const search of searches) {
-        query.where("name", "like", `%${search}%`)
+        query = query.where("name", "like", `%${search}%`)
       }
     }
+
     if (sortBy && sortOrder) {
-      query.orderBy(sortBy, sortOrder)
+      query = query.orderBy(sortBy, sortOrder)
     }
-    if (page && limit) {
-      query.limit(limit).offset((page - 1) * limit)
+
+    switch (type) {
+      case "dashboard":
+        query = query.selectAll()
+        break
+
+      case "commerce":
+        query = query.select([
+          "name",
+          "description",
+          "price",
+          "weight",
+          "images",
+        ])
+        break
     }
+
     return query.execute()
   }
 

@@ -45,12 +45,13 @@ export const updateItemSchema = createItemSchema.partial()
 
 // Query schema for list endpoint
 export const listItemsQuerySchema = z.object({
-  spaceId: z.coerce.number().int().positive(),
+  space_id: z.coerce.number().int().positive(),
   page: z.coerce.number().int().positive().optional(),
   limit: z.coerce.number().int().positive().max(100).optional(),
   search: z.string().optional(),
-  sortBy: z.string().optional(),
-  sortOrder: z.enum(["asc", "desc"]).optional(),
+  sort_by: z.string().optional(),
+  sort_order: z.enum(["asc", "desc"]).optional(),
+  type: z.enum(["commerce", "dashboard"]).optional(),
 })
 
 // Params schema for ID-based routes
