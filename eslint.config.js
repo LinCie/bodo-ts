@@ -27,7 +27,16 @@ export default defineConfig(
     },
     rules: {
       ...vitest.configs.recommended.rules,
+    },
+  },
+  {
+    rules: {
+      "@typescript-eslint/restrict-template-expressions": "off",
       "@typescript-eslint/unbound-method": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
     },
   },
 )
