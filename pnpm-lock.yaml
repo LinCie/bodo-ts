@@ -13,15 +13,9 @@ importers:
       helmet:
         specifier: ^8.1.0
         version: 8.1.0
-      husky:
-        specifier: ^9.1.7
-        version: 9.1.7
       kysely:
         specifier: ^0.28.8
         version: 0.28.8
-      lint-staged:
-        specifier: ^16.2.7
-        version: 16.2.7
       morgan:
         specifier: ^1.10.1
         version: 1.10.1
@@ -62,9 +56,15 @@ importers:
       eslint:
         specifier: ^9.39.1
         version: 9.39.1
+      husky:
+        specifier: ^9.1.7
+        version: 9.1.7
       kysely-codegen:
         specifier: ^0.19.0
         version: 0.19.0(kysely@0.28.8)(mysql2@3.15.3)(typescript@5.9.3)
+      lint-staged:
+        specifier: ^16.2.7
+        version: 16.2.7
       pino-pretty:
         specifier: ^13.1.2
         version: 13.1.2
