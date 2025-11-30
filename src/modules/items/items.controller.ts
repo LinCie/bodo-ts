@@ -1,5 +1,6 @@
 import type { Request, Response } from "express"
 import type {
+  ChatPromptInput,
   CreateItemInput,
   FindAllQuery,
   ItemIdParams,
@@ -7,7 +8,9 @@ import type {
 } from "./items.schema.js"
 
 import { Controller } from "#infrastructures/base/controller.base.js"
+import { ItemsAI } from "./items.ai.js"
 import {
+  chatPromptSchema,
   createItemSchema,
   findAllQuerySchema,
   itemIdParamsSchema,
@@ -16,10 +19,15 @@ import {
 import { ItemsService } from "./items.service.js"
 
 class ItemsController extends Controller {
-  private readonly itemsService = new ItemsService()
+  private readonly itemsService: ItemsService
+  private readonly itemsAI: ItemsAI
 
   constructor() {
     super()
+
+    this.itemsService = new ItemsService()
+    this.itemsAI = new ItemsAI(this.itemsService)
+
     this.bindRoutes([
       {
         handler: this.list,
@@ -58,6 +66,12 @@ class ItemsController extends Controller {
         path: "/:id",
         paramsSchema: itemIdParamsSchema,
       },
+      {
+        handler: this.generate,
+        method: "post",
+        path: "/chat",
+        schema: chatPromptSchema,
+      },
     ])
   }
 
@@ -95,6 +109,12 @@ class ItemsController extends Controller {
   private updateInventory = async (req: Request, res: Response) => {
     const { id } = req.validatedParams as ItemIdParams
     const result = await this.itemsService.updateInventoryToChildren(id)
+    res.json(result).send()
+  }
+
+  private generate = async (req: Request, res: Response) => {
+    const { prompt } = req.validated as ChatPromptInput
+    const result = await this.itemsAI.generate(prompt)
     res.json(result).send()
   }
 }

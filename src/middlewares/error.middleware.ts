@@ -3,6 +3,7 @@ import type { NextFunction, Request, Response } from "express"
 import {
   BadRequestError,
   ForbiddenError,
+  InternalServerError,
   NotFoundError,
   UnauthorizedError,
   UniqueConstraintError,
@@ -35,6 +36,7 @@ function errorMiddleware(
     { ErrorClass: UnauthorizedError, statusCode: 401 },
     { ErrorClass: ForbiddenError, statusCode: 403 },
     { ErrorClass: UniqueConstraintError, statusCode: 409 },
+    { ErrorClass: InternalServerError, statusCode: 500 },
   ]
 
   for (const customError of customErrors) {

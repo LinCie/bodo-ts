@@ -51,6 +51,10 @@ const findAllQuerySchema = z.object({
   with_inventories: z.coerce.boolean().optional(),
 })
 
+const chatPromptSchema = z.object({
+  prompt: z.string().min(1, "Prompt is required"),
+})
+
 // Params schema for ID-based routes
 const itemIdParamsSchema = z.object({
   id: z.coerce.number().int().positive(),
@@ -58,13 +62,21 @@ const itemIdParamsSchema = z.object({
 
 type FindAllQuery = z.infer<typeof findAllQuerySchema>
 type ItemIdParams = z.infer<typeof itemIdParamsSchema>
+type ChatPromptInput = z.infer<typeof chatPromptSchema>
 type CreateItemInput = z.infer<typeof createItemSchema>
 type UpdateItemInput = z.infer<typeof updateItemSchema>
 
 export {
+  chatPromptSchema,
   createItemSchema,
   findAllQuerySchema,
   itemIdParamsSchema,
   updateItemSchema,
 }
-export type { CreateItemInput, FindAllQuery, ItemIdParams, UpdateItemInput }
+export type {
+  ChatPromptInput,
+  CreateItemInput,
+  FindAllQuery,
+  ItemIdParams,
+  UpdateItemInput,
+}

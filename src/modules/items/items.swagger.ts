@@ -108,6 +108,15 @@
  *       allOf:
  *         - $ref: '#/components/schemas/CreateItemInput'
  *       description: All fields are optional for update
+ *     ChatPromptInput:
+ *       type: object
+ *       required:
+ *         - prompt
+ *       properties:
+ *         prompt:
+ *           type: string
+ *           minLength: 1
+ *           description: The user prompt for the AI
  */
 
 /**
@@ -205,6 +214,33 @@
  *               $ref: '#/components/schemas/Item'
  *       404:
  *         description: Item not found
+ */
+
+/**
+ * @swagger
+ * /items/chat:
+ *   post:
+ *     summary: Chat with AI about items
+ *     description: Generate content or query items using natural language through AI
+ *     tags: [Items]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ChatPromptInput'
+ *     responses:
+ *       200:
+ *         description: AI generated response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               description: The AI generated text response
+ *       400:
+ *         description: Invalid input
+ *       500:
+ *         description: Internal server error
  */
 
 /**
