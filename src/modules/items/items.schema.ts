@@ -6,15 +6,11 @@ const jsonSchema = z
   .nullable()
   .optional()
 
-// Decimal schema (stored as string in DB, can be number or string in input)
-// Note: Generated fields may have defaults, so we allow undefined but handle null
-const decimalSchema = z.union([z.number(), z.string()]).optional()
-
 // Create schema - includes all fields that can be set when creating
-export const createItemSchema = z.object({
+const createItemSchema = z.object({
   attributes: jsonSchema,
   code: z.string().nullable().optional(),
-  cost: decimalSchema,
+  cost: z.coerce.string().optional(),
   description: z.string().nullable().optional(),
   dimension: jsonSchema,
   files: jsonSchema,
@@ -27,39 +23,48 @@ export const createItemSchema = z.object({
   options: jsonSchema,
   parent_id: z.number().nullable().optional(),
   parent_type: z.string().nullable().optional(),
-  price: decimalSchema,
+  price: z.coerce.string().optional(),
   primary_code: z.string().nullable().optional(),
   sku: z.string().nullable().optional(),
   space_id: z.number().nullable().optional(),
   space_type: z.string().nullable().optional(),
-  status: z.string().nullable().optional(),
+  status: z.enum(["active", "inactive", "archived"]).optional(),
   tags: jsonSchema,
   type_id: z.number().nullable().optional(),
   type_type: z.string().nullable().optional(),
   variants: jsonSchema,
-  weight: decimalSchema,
+  weight: z.coerce.string().optional(),
 })
 
 // Update schema - all fields optional
-export const updateItemSchema = createItemSchema.partial()
+const updateItemSchema = createItemSchema.partial()
 
-// Query schema for list endpoint
-export const listItemsQuerySchema = z.object({
+const findAllQuerySchema = z.object({
   space_id: z.coerce.number().int().positive(),
   page: z.coerce.number().int().positive().optional(),
   limit: z.coerce.number().int().positive().max(100).optional(),
   search: z.string().optional(),
-  sort_by: z.string().optional(),
+  status: z.enum(["active", "inactive", "archived"]).optional(),
+  sort_by: z.enum(["id", "name", "price", "created_at"]).optional(),
   sort_order: z.enum(["asc", "desc"]).optional(),
   type: z.enum(["commerce", "dashboard"]).optional(),
+  with_inventories: z.coerce.boolean().optional(),
 })
 
 // Params schema for ID-based routes
-export const itemIdParamsSchema = z.object({
+const itemIdParamsSchema = z.object({
   id: z.coerce.number().int().positive(),
 })
 
-export type CreateItemInput = z.infer<typeof createItemSchema>
-export type UpdateItemInput = z.infer<typeof updateItemSchema>
-export type ListItemsQuery = z.infer<typeof listItemsQuerySchema>
-export type ItemIdParams = z.infer<typeof itemIdParamsSchema>
+type FindAllQuery = z.infer<typeof findAllQuerySchema>
+type ItemIdParams = z.infer<typeof itemIdParamsSchema>
+type CreateItemInput = z.infer<typeof createItemSchema>
+type UpdateItemInput = z.infer<typeof updateItemSchema>
+
+export {
+  createItemSchema,
+  findAllQuerySchema,
+  itemIdParamsSchema,
+  updateItemSchema,
+}
+export type { CreateItemInput, FindAllQuery, ItemIdParams, UpdateItemInput }
