@@ -26,6 +26,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google/genai": "^1.30.0",
     "argon2": "^0.44.0",
     "bcrypt": "^6.0.0",
     "express": "^5.1.0",
