@@ -1,4 +1,4 @@
-import { env } from "#infrastructures/config/env.config.js"
+import { env } from "#infrastructure/config/index.js"
 import swaggerJsdoc from "swagger-jsdoc"
 
 const options: swaggerJsdoc.Options = {
@@ -25,7 +25,7 @@ const options: swaggerJsdoc.Options = {
       },
     },
   },
-  apis: ["./src/modules/**/*.swagger.ts"],
+  apis: ["./src/docs/**/*.swagger.ts"],
 }
 
 export const swaggerSpec = swaggerJsdoc(options)

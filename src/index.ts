@@ -1,9 +1,11 @@
 import { swaggerSpec } from "#docs/swagger.js"
-import { env } from "#infrastructures/config/env.config.js"
-import { logger } from "#infrastructures/utilities/logger.utility.js"
-import { errorMiddleware } from "#middlewares/error.middleware.js"
-import { AuthController } from "#modules/auth/auth.controller.js"
-import { ItemsController } from "#modules/items/items.controller.js"
+import {
+  composeAuthModule,
+  composeItemsModule,
+} from "#infrastructure/composition/index.js"
+import { env } from "#infrastructure/config/index.js"
+import { logger } from "#infrastructure/logging/index.js"
+import { errorMiddleware } from "#presentation/shared/middleware/index.js"
 import express from "express"
 import helmet from "helmet"
 import morgan from "morgan"
@@ -26,6 +28,10 @@ app
   .use(helmet())
   .use(express.json())
 
+// Compose modules using dependency injection
+const authController = composeAuthModule()
+const itemsController = composeItemsModule()
+
 // Regular Routes
 app
   // Index route
@@ -33,8 +39,8 @@ app
     res.send("Hello World!")
   })
   .use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
-  .use("/api/v1/auth", new AuthController().router)
-  .use("/api/v1/items", new ItemsController().router)
+  .use("/api/v1/auth", authController.router)
+  .use("/api/v1/items", itemsController.router)
 
 // After request middlewares
 app.use(errorMiddleware)
